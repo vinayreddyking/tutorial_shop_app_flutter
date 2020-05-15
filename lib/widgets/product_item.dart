@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart.dart';
 import 'package:shop_app/providers/product.dart';
 import 'package:shop_app/screens/product_detail_screen.dart';
+import 'package:shop_app/widgets/badge.dart';
 
 class ProductItem extends StatelessWidget {
 //  final String id;
@@ -42,14 +43,37 @@ class ProductItem extends StatelessWidget {
             product.title,
             textAlign: TextAlign.center,
           ),
-          trailing: IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
-              color: Theme.of(context).accentColor,
+          trailing: Consumer<Cart>(
+            builder: (context, cartItem, wid) => Badge(
+              child: wid,
+              value: cartItem.quantitiesById(product.id).toString(),
+              color: Colors.white,
             ),
-            onPressed: () =>
-                cartItem.addItems(product.id, product.title, product.price),
-            //186 Video Completed.
+            child: IconButton(
+              icon: Icon(
+                Icons.shopping_cart,
+                color: Theme.of(context).accentColor,
+              ),
+              onPressed: () {
+                cartItem.addItems(product.id, product.title, product.price);
+                Scaffold.of(context).hideCurrentSnackBar();
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    '${cartItem.quantitiesById(product.id)} Items Added to Cart',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  duration: Duration(seconds: 2),
+                  action: SnackBarAction(
+                    label: 'UNDO',
+                    onPressed: () {
+                      cartItem.removeSingleQuantity(product.id);
+                    },
+                    textColor: Colors.white,
+                  ),
+                ));
+              },
+            ),
           ),
         ),
       ),
