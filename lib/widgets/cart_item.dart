@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart.dart';
 
@@ -33,6 +34,28 @@ class CartItem extends StatelessWidget {
         direction: DismissDirection.endToStart,
         onDismissed: (direction) {
           cart.removeItemById(productId);
+        },
+        confirmDismiss: (_) {
+          return showDialog<bool>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: Text('Are You Sure?'),
+              content: Text('Do You want to Remove Item from the Cart!'),
+              backgroundColor: Colors.white,
+              actions: <Widget>[
+                OutlineButton(
+                  child: Text('No'),
+                  onPressed: () => Navigator.pop(ctx, false),
+                ),
+                OutlineButton(
+                  child: Text('Yes'),
+                  onPressed: () => Navigator.pop(ctx, true),
+                ),
+              ],
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+            ),
+          );
         },
         child: Card(
           margin: EdgeInsets.symmetric(
