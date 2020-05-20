@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shop_app/providers/product.dart';
 
 class Products with ChangeNotifier {
@@ -49,15 +52,32 @@ class Products with ChangeNotifier {
     return _items.where((e) => e.isFavorite).toList();
   }
 
-  void addProducts(Product p) {
-    var newProduct = Product(
+  Future<void> addProducts(Product p) async {
+    const String url =
+        'https://tutorial-flutter-shop-app.firebaseio.com/products.json';
+    try {
+      final res = await http.post(url,
+          body: json.encode({
+            'title': p.title,
+            'description': p.description,
+            'price': p.price,
+            'imageUrl': p.imageUrl,
+            'isFavorite': p.isFavorite,
+          }));
+      final newProduct = Product(
         title: p.title,
         description: p.description,
         price: p.price,
         imageUrl: p.imageUrl,
-        id: DateTime.now().toString());
-    _items.add(newProduct);
-    notifyListeners();
+        id: json.decode(res.body)['name'],
+      );
+      print('hello ' + newProduct.id);
+      _items.add(newProduct);
+      notifyListeners();
+    } catch (err) {
+      print(err);
+      throw err;
+    }
   }
 
   void updateProducts(String id, Product p) {
