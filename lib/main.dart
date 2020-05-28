@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart.dart';
 import 'package:shop_app/providers/orders.dart';
 import 'package:shop_app/providers/products.dart';
+import 'package:shop_app/screens/auth_screen.dart';
 import 'package:shop_app/screens/cart_screen.dart';
 import 'package:shop_app/screens/edit_product_screen.dart';
 import 'package:shop_app/screens/orders_screen.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Lato',
         ),
 //        home: ProductsOverviewScreen(),
-        initialRoute: '/',
+        initialRoute: AuthScreen.routeName,
         routes: {
           '/': (ctx) => ProductsOverviewScreen(),
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           OrdersScreen.routeName: (ctx) => OrdersScreen(),
           UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
           EditProductScreen.routeName: (ctx) => EditProductScreen(),
+          AuthScreen.routeName: (ctx) => AuthScreen(),
         },
         debugShowCheckedModeBanner: false,
       ),
